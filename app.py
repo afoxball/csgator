@@ -151,7 +151,7 @@ FEEDBACK:
 """
 
     # Use Gemini model to generate feedback
-    model = genai.GenerativeModel('gemini-pro')
+    model = genai.GenerativeModel('gemini-1.5-flash')
     response = model.generate_content(grading_prompt)
     
     # Parse the response
