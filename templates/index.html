@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Gator</title>
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Center content vertically and horizontally */
+        body {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .card {
+            border: none;
+            border-radius: 1rem;
+        }
+        .btn-lg {
+            min-width: 150px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <div class="card shadow-lg p-5">
+                    <div class="card-body">
+                        <!-- Logo / Icon Placeholder -->
+                        <div class="mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#198754" class="bi bi-laptop" viewBox="0 0 16 16">
+                                <path d="M13.5 3a.5.5 0 0 1 .5.5V11H2V3.5a.5.5 0 0 1 .5-.5h11zm-11-1A1.5 1.5 0 0 0 1 2.5V11H.5a.5.5 0 0 0 0 1H1.5v2.5a1.5 1.5 0 1 0 3 0v-2.5h7v2.5a1.5 1.5 0 1 0 3 0V12h1a.5.5 0 0 0 0-1H14.5V2.5A1.5 1.5 0 0 0 13 1H2.5z"/>
+                            </svg>
+                        </div>
+                        
+                        <h1 class="display-4 fw-bold mb-3 text-dark">Welcome to CS Gator!</h1>
+                        <p class="lead text-secondary mb-5">Your ultimate companion for Computer Science mastery.</p>
+                        
+                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                            <!-- Register Button (Green for Gator/Success) -->
+                            <a href="/register" class="btn btn-success btn-lg px-4 gap-3">Register</a>
+                            
+                            <!-- Sign In Button -->
+                            <a href="/login" class="btn btn-outline-dark btn-lg px-4">Sign In</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional, but good for interactivity later) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
