@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'dev-secret-key-change-in-production'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev-secret-key-change-in-production')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///csgator.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -58,4 +58,6 @@ def signup():
     return render_template('signup.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Debug mode should be disabled in production
+    debug_mode = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(debug=debug_mode)
