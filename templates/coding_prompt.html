@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Challenge - CS Gator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CodeMirror for code editor -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/monokai.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .card {
+            border: none;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .CodeMirror {
+            height: 400px;
+            border-radius: 0.5rem;
+            font-size: 14px;
+        }
+        .prompt-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 1rem;
+            margin-bottom: 20px;
+        }
+        .editor-section {
+            background: #fff;
+            padding: 30px;
+            border-radius: 1rem;
+        }
+        .submit-btn {
+            min-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold text-dark">Coding Challenge</h1>
+            <p class="lead text-secondary">Write your solution and get AI-powered feedback</p>
+        </div>
+
+        <!-- Coding Prompt Section -->
+        <div class="prompt-section">
+            <h3 class="mb-3">📝 Problem Statement</h3>
+            <div id="prompt-content">
+                <h5>{{ prompt_title }}</h5>
+                <p class="text-muted">{{ prompt_description }}</p>
+                
+                {% if prompt_examples %}
+                <div class="mt-3">
+                    <h6>Examples:</h6>
+                    <pre class="bg-light p-3 rounded">{{ prompt_examples }}</pre>
+                </div>
+                {% endif %}
+                
+                {% if prompt_constraints %}
+                <div class="mt-3">
+                    <h6>Constraints:</h6>
+                    <ul>
+                        {% for constraint in prompt_constraints %}
+                        <li>{{ constraint }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Code Editor Section -->
+        <div class="editor-section">
+            <h3 class="mb-3">💻 Your Solution</h3>
+            <form id="submission-form" method="POST" action="/submit-code">
+                <div class="mb-3">
+                    <label for="language" class="form-label">Programming Language:</label>
+                    <select class="form-select" id="language" name="language">
+                        <option value="python" selected>Python</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="java">Java</option>
+                        <option value="cpp">C++</option>
+                        <option value="csharp">C#</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Your Code:</label>
+                    <textarea id="code-editor" name="code"></textarea>
+                </div>
+
+                <input type="hidden" name="prompt_title" value="{{ prompt_title }}">
+                <input type="hidden" name="prompt_description" value="{{ prompt_description }}">
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <button type="submit" class="btn btn-success btn-lg submit-btn" id="submit-btn">
+                        <span id="submit-text">Submit for Grading</span>
+                        <span id="submit-spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                    </button>
+                    <a href="/" class="btn btn-outline-secondary btn-lg">Back to Home</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js"></script>
+    
+    <script>
+        // Initialize CodeMirror
+        var editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            mode: 'python',
+            theme: 'monokai',
+            lineNumbers: true,
+            indentUnit: 4,
+            smartIndent: true,
+            matchBrackets: true,
+            autoCloseBrackets: true
+        });
+
+        // Change editor mode based on language selection
+        document.getElementById('language').addEventListener('change', function() {
+            var modeMap = {
+                'python': 'python',
+                'javascript': 'javascript',
+                'java': 'text/x-java',
+                'cpp': 'text/x-c++src',
+                'csharp': 'text/x-csharp'
+            };
+            editor.setOption('mode', modeMap[this.value]);
+        });
+
+        // Handle form submission
+        document.getElementById('submission-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get code from editor
+            var code = editor.getValue();
+            if (!code.trim()) {
+                alert('Please write some code before submitting!');
+                return;
+            }
+            
+            // Show loading state
+            document.getElementById('submit-text').classList.add('d-none');
+            document.getElementById('submit-spinner').classList.remove('d-none');
+            document.getElementById('submit-btn').disabled = true;
+            
+            // Create form data
+            var formData = new FormData(this);
+            formData.set('code', code);
+            
+            // Submit via fetch
+            fetch('/submit-code', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.open();
+                document.write(html);
+                document.close();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while submitting your code. Please try again.');
+                // Reset button
+                document.getElementById('submit-text').classList.remove('d-none');
+                document.getElementById('submit-spinner').classList.add('d-none');
+                document.getElementById('submit-btn').disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>
