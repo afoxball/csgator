@@ -17,9 +17,9 @@ if GOOGLE_API_KEY:
 # Sample coding prompts (you can expand this or load from a database)
 CODING_PROMPTS = {
     'default': {
-        'title': 'Two Sum Problem',
-        'description': 'Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target. You may assume that each input would have exactly one solution, and you may not use the same element twice.',
-        'examples': 'Input: nums = [2,7,11,15], target = 9\nOutput: [0,1]\nExplanation: Because nums[0] + nums[1] == 9, we return [0, 1].',
+        'title': 'Simple Function to Add Two Numbers',
+        'description': 'Create a function that takes two integers as input and returns their sum.',
+        'examples': 'Input: 5, 6 target = 11\nOutput: 11\nExplanation: 5 + 6 = 11, we return 11.',
         'constraints': [
             '2 <= nums.length <= 10^4',
             '-10^9 <= nums[i] <= 10^9',
@@ -151,7 +151,7 @@ FEEDBACK:
 """
 
     # Use Gemini model to generate feedback
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash') #may want to change to the 3.0 models...
     response = model.generate_content(grading_prompt)
     
     # Parse the response
